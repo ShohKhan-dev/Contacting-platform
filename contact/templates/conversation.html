@@ -1,0 +1,131 @@
+{% extends 'base.html' %} 
+{% load humanize %}
+
+{% block title %}Conversations{% endblock %}
+
+
+{% block content %}
+
+    <div class="container my-2" id="conversationapp">
+
+        <div class="row" id="messageBody"style="overflow-y: scroll; height: 500px;">
+            <div class="col-md-12">
+                <!-- <h1 class="title">Conversations</h1> -->
+                <a href="{% url 'profile' cur_user.id %}">
+                    <h2>{{cur_user.first_name}} {{cur_user.last_name}}</h2>
+                </a>
+                
+                <hr>
+
+                <div class="messages" id="messages">
+                    {% for message in conversation.messages.all %}
+                        <div class="post">
+                            <article class="media">
+
+                                <div class="media-content">
+                                    <div class="content">
+                                        <p>
+                                            <strong>{{ message.created_by.first_name }}</strong> <small>{{ message.created_at|naturaltime }}</small>
+                                            <br>
+                                            {{ message.content }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </article>
+                        </div>
+                    {% endfor %}
+
+                    <div id="new-messages" class="new-messages">
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <form autocomplete="off" onsubmit="return false;">
+                    {% csrf_token %}
+                   
+                    <textarea class="form-control" id="message-input" placeholder="Your message"></textarea>
+               
+                    <button class="btn btn-primary my-2" id="send-button">Send</button>
+               
+                </form>
+
+            </div>
+            
+
+        </div>
+
+        
+
+    </div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+
+const messageInput = document.getElementById('message-input')
+const sendButton = document.getElementById('send-button')
+const messageBox = document.getElementById('new-messages')
+
+var chatHistory = document.getElementById("messageBody");
+chatHistory.scrollTop = chatHistory.scrollHeight;
+
+// const csrf = document.getElementsByName('csrfmiddlewaretoken')[0].value
+
+const sendMessageData = (msg) => {
+    $.ajax({
+        type: 'POST',
+        url: '/add_message',
+        data: {
+            'csrfmiddlewaretoken': csrf,
+            'msg': msg,
+            'conversation_id':"{{conversation.id}}",
+            'recipient':"{{cur_user.username}}"
+        },
+        success: (res)=> {
+           
+            const data = res.data
+            messageBox.innerHTML += `<div class="post">
+                                        <article class="media">
+                
+                                            <div class="media-content">
+                                                <div class="content">
+                                                    <p>
+                                                        <strong>${data.user}</strong> <small>${data.created_at}</small>
+                                                        <br>
+                                                        ${ data.context }
+                                                    </p>
+                                                </div>
+                                            </div>
+                
+                                        </article>
+                                    </div>`
+        },
+        error: (err)=> {
+            console.log(err)
+        }
+    })
+}
+
+sendButton.addEventListener('click', e=>{
+
+    console.log(messageInput.value)
+
+    if (messageInput.value != ''){
+        sendMessageData(messageInput.value)
+    }
+    
+    messageInput.value = '';
+})
+
+</script>
+{% endblock %}

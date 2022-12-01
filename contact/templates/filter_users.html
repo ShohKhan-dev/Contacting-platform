@@ -1,0 +1,307 @@
+{% extends 'base.html' %} 
+{% load humanize %}
+
+{% block title %}Filter Users{% endblock %}
+
+
+{% block content %}
+
+    <div class="container" id="filter_users">
+
+        <h1 class="title">Filter Users</h1>
+        <div id="info-message">
+
+        </div>
+        <hr>
+
+        <div class="row">
+            <div class="col-md-6">
+
+                <div class="row" style="height: 200px;">
+                    <div class="col-md-12">
+                        <div class="chip" id="word-international" onClick="highlight('international')"> 
+                            International
+                            <span class="closebtn">&times;</span>
+                        </div>
+                        <div class="chip" id="word-russian" onClick="highlight('russian')"> 
+                            Russian
+                            <span class="closebtn">&times;</span>
+                        </div>
+                        <div class="chip" id="word-cis" onClick="highlight('cis')"> 
+                            CIS
+                            <span class="closebtn">&times;</span>
+                        </div>
+                        <div class="chip" id="word-bs_1" onClick="highlight('bs_1')"> 
+                            Bachelor 1st
+                            <span class="closebtn">&times;</span>
+                        </div>
+                        <div class="chip" id="word-bs_2" onClick="highlight('bs_2')"> 
+                            Bachelor 2nd
+                            <span class="closebtn">&times;</span>
+                        </div>
+                        <div class="chip" id="word-bs_3" onClick="highlight('bs_3')"> 
+                            Bachelor 3rd
+                            <span class="closebtn">&times;</span>
+                        </div>
+                        <div class="chip" id="word-bs_4" onClick="highlight('bs_4')"> 
+                            Bachelor 4th
+                            <span class="closebtn">&times;</span>
+                        </div>
+                        <div class="chip" id="word-ms_1" onClick="highlight('ms_1')"> 
+                            Masters 1st
+                            <span class="closebtn">&times;</span>
+                        </div>
+                        <div class="chip" id="word-ms_2" onClick="highlight('ms_2')"> 
+                            Masters 2nd
+                            <span class="closebtn">&times;</span>
+                        </div>
+                        <div class="chip" id="word-phd" onClick="highlight('phd')"> 
+                            Phds
+                            <span class="closebtn">&times;</span>
+                        </div>
+
+                    </div>
+                
+                </div>
+
+                <div class="row">
+                    <div class="mt-3 inputs">
+                        <form id="filter-form" onsubmit="return false;" autocomplete="off">
+                            {% csrf_token %}
+            
+                            <!-- <i class="fa fa-search"></i> -->
+                            <input type="text" class="form-control" id="filter-input" placeholder="Search Users...">
+            
+                        </form>
+                    </div>
+
+                    <div id="filters-box">
+                        
+                        
+                    </div>
+                </div>
+                
+
+            </div>
+            
+
+            <div class="col-md-6">
+                <div class="row" style="overflow-y: scroll; height: 450px;">
+                    <div class="col-md-12" id="show-filtered">
+
+
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <form autocomplete="off" onsubmit="return false;">
+                            {% csrf_token %}
+                           
+                            <textarea class="form-control" rows="3" id="message-input" placeholder="Your message"></textarea>
+                       
+                            <button class="btn btn-primary my-2" id="send-button">Send</button>
+                       
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+       
+    </div>
+
+{% endblock %}
+
+
+
+{% block script %}
+
+<script>
+
+    const showFiltered = document.getElementById('show-filtered')
+
+    const filterForm = document.getElementById('filter-form')
+    const filterInput = document.getElementById('filter-input')
+    const filtersBox = document.getElementById('filters-box')
+    let filtered_users = [];
+
+    let by_group = {};
+    
+
+
+    function highlight(id) {
+        
+        var element = document.getElementById("word-"+id);
+    
+
+        if (element.className == "chip-clicked"){
+            // console.log("Remove users for "+id);
+            element.className = "chip";
+
+            if (Array.isArray(by_group[id])){
+                by_group[id].forEach((item, index)=>{
+                    filtered_users = filtered_users.filter(element => element !== item); 
+                    $("#user-" + item).remove();
+                })
+            }
+            
+            by_group[id] = [];
+        }
+
+        else{
+            // console.log("Show users for "+id);
+            element.className = "chip-clicked";
+
+            $.ajax({
+              type: 'POST',
+              url: '/group_filter',
+              data: {
+                  'csrfmiddlewaretoken': csrf,
+                  'keyword': id,
+              },
+              success: (res)=> {
+                  const data = res.data
+
+                  if (Array.isArray(data)){
+                      data.forEach(user=> {
+
+                        if (!by_group[id]) {
+                                by_group[id] = [];
+                            }
+
+                        by_group[id].push(user.id);
+
+                        if (!filtered_users.includes(user.id)){
+
+                            filtered_users.push(user.id);
+
+                            showFiltered.innerHTML += `<div class="user-name chip" id="user-${user.id}" onClick="filterManager(${user.id},'${user.first_name}','${user.last_name}')"> 
+                                                            ${user.first_name} ${user.last_name}
+                                                            <span class="closebtn">&times;</span>
+                                                        </div>`
+                        }
+
+                      })
+                  }
+              },
+              error: (err)=> {
+                  console.log(err)
+              }
+            })
+        }
+    }
+
+
+
+    const sendFilterData = (game) => {
+          $.ajax({
+              type: 'POST',
+              url: '/search',
+              data: {
+                  'csrfmiddlewaretoken': csrf,
+                  'game': game,
+              },
+              success: (res)=> {
+                  const data = res.data
+
+                  if (Array.isArray(data)){
+                      filtersBox.innerHTML = "";
+                      // console.log(searchInput.value.length);
+                      data.forEach(user=> {
+
+                        if (!filtered_users.includes(user.id)){
+
+                            filtersBox.innerHTML +=`<div class="user-name my-2" id="student-${user.id}" onClick="filterManager(${user.id},'${user.first_name}','${user.last_name}')">
+                                                        <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
+                                                        ${user.first_name} ${user.last_name}
+                                                    </div>`
+
+                        }
+
+                      })
+                  }
+              },
+              error: (err)=> {
+                  console.log(err)
+              }
+          })
+      }
+
+      filterInput.addEventListener('keyup', e=>{
+          // console.log(e.target.value)
+
+          if (e.target.value == 0){
+            filtersBox.innerHTML = '';
+          }
+          else{
+            sendFilterData(e.target.value)
+          }
+          
+      })
+    
+
+    function filterManager(id, first_name, last_name){
+
+        if (filtered_users.includes(id)){
+
+            filtered_users = filtered_users.filter(element => element !== id); 
+
+            $("#user-" + id).remove();
+            
+        }
+        else{
+
+            $("#student-" + id).remove();
+
+            filtered_users.push(id);
+
+            showFiltered.innerHTML += `<div class="user-name chip" id="user-${id}" onClick="filterManager(${id},'${first_name}','${last_name}')"> 
+                                            ${first_name} ${last_name}
+                                            <span class="closebtn">&times;</span>
+                                        </div>`
+        }
+    }
+
+    
+    const messageInput = document.getElementById('message-input')
+    const sendButton = document.getElementById('send-button')
+    const infomsg = document.getElementById("info-message");
+
+    const sendMessageData = (msg) => {
+
+        $.ajax({
+            type: 'POST',
+            url: '/multisend_message',
+            data: {
+                'csrfmiddlewaretoken': csrf,
+                'msg': msg,
+                'recipients[]': filtered_users
+            },
+            success: (res)=> {
+            
+                const data = res.data
+
+                infomsg.innerHTML = `<p style="color:red">Message to all selected Students has been sent!</p>`
+                
+            },
+            error: (err)=> {
+                console.log(err)
+            }
+        })
+    }
+
+    sendButton.addEventListener('click', e=>{
+
+        if (messageInput.value != ''){
+            sendMessageData(messageInput.value)
+        }
+        
+        messageInput.value = '';
+    })
+
+
+</script>
+
+{% endblock %}

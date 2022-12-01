@@ -1,0 +1,82 @@
+{% extends 'base.html' %} 
+{% load humanize %}
+
+{% block title %}Notifications{% endblock %}
+
+
+{% block content %}
+
+    <div class="container" id="notification">
+
+        <h1 class="title">Notifications</h1>
+        <hr>
+
+        {% if not notifications %}
+            <p>You have no notifications!</p>
+        {% endif %}
+
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="title">New Messsages</h3>
+                <hr>
+                {% if not message_notifications %}
+                    <p>You have no New messages!</p>
+                {% endif %}
+
+                <div class="message notifications">
+                    {% for message_notification in message_notifications %}
+                        <div class="post">
+                            <article class="media">
+
+                                <div class="media-content">
+                                    <div class="content">
+                                        <p>
+                                            <a href="{% url 'conversation' message_notification.created_by.id %}">
+                                                <strong>{{ message_notification.created_by.first_name }} {{message_notification.created_by.last_name}}</strong> sent message<br>
+                                                <small>{{ message_notification.created_at|naturaltime }}</small>
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </article>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="title">New Joineds or New Information added</h3>
+                <hr>
+                {% if not new_join_notifications %}
+                    <p>You have no New joins!</p>
+                {% endif %}
+
+                <div class="message notifications">
+                    {% for new_join_notification in new_join_notifications %}
+                        <div class="post">
+                            <article class="media">
+
+                                <div class="media-content">
+                                    <div class="content">
+                                        <p>
+                                            <a href="{% url 'profile' new_join_notification.created_by.id %}">
+                                                <strong>{{ new_join_notification.created_by.first_name }} {{new_join_notification.created_by.last_name}}</strong> is new joined or updated info!<br>
+                                                <small>{{ new_join_notification.created_at|naturaltime }}</small>
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </article>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
