@@ -18,7 +18,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-FirstName, LastName, InnoEmail, CONFIRMATION = range(4)
+FirstName, LastName, InnoEmail, COURSE, LOCATION, CONFIRMATION = range(6)
 
 def start(update, context):
 
@@ -62,32 +62,73 @@ def last_name(update, context):
 
 def inno_email(update, context):
 
-    reply_keyboard = [['Yes', 'No']]
-
     user = update.message.from_user
+
+    reply_keyboard = [['International', 'Russian', 'CIS']]
 
     if update.message.text:
         User.objects.filter(username = user.id).update(inno_email=update.message.text)
 
+
+    message = "Ok, Please tell me what type of student you are?"
+
+    # print("Innopolis Email of {} is {}".format(user.first_name, update.message.text))
+
+    update.message.reply_text(message, reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
+
+    return LOCATION
+
+
+def location(update, context):
+
+    reply_keyboard = [['Bachelor 1st', 'Bachelor 2nd'], 
+                      ['Bachelor 3rd', 'Bachelor 4th'], 
+                      ['Master 1st', 'Master 2nd', 'Phd']]
+
+    user = update.message.from_user
+
+    if update.message.text and update.message.text in ['International', 'Russian', 'CIS']:
+
+        User.objects.filter(username = user.id).update(location=update.message.text)
+
+    message = "I see, Please tell me which course do you study in?"
+
+    update.message.reply_text(message, reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
+
+
+    return COURSE
+
+
+def course(update, context):
+
+    user = update.message.from_user
+
+    reply_keyboard = [['Yes', 'No']]
+
+    courses = ['Bachelor 1st', 'Bachelor 2nd', 'Bachelor 3rd', 'Bachelor 4th', 'Master 1st', 'Master 2nd', 'Phd']
+
+    if update.message.text and update.message.text in courses:
+
+        User.objects.filter(username = user.id).update(course=update.message.text)
+
     cur_user = User.objects.get(username=user.id)
 
     message = "First name: "+cur_user.first_name + "\nLast name: " + cur_user.last_name + "\nEmail: " + cur_user.inno_email \
-        + "\n\nIs all Information Correct?"
+        + "\nType: "+cur_user.location + "\nCourse: "+cur_user.course + "\n\nIs all Information Correct?"
 
-
-    print("Innopolis Email of {} is {}".format(user.first_name, update.message.text))
+    # print("Innopolis Email of {} is {}".format(user.first_name, update.message.text))
 
     update.message.reply_text(message, reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
 
     return CONFIRMATION
 
+    
 
 def confirm(update, context):
 
     user = update.message.from_user
 
     if update.message.text == "Yes":
-
 
         update.message.reply_text('Thank you for you Informations! Our team will review your Infromation soon and confirms for safety!',
                               reply_markup=ReplyKeyboardRemove())
@@ -126,9 +167,9 @@ def cancel(update, context):
 def send_message(message, user_id):
     bot = Bot(token=settings.TELEGRAM_BOT_TOKEN)
 
-    print(message)
-    print(user_id)
-    print(type(user_id))
+    # print(message)
+    # print(user_id)
+    # print(type(user_id))
     # if not user_id:
     #     user_id = settings.DJANGO_TELEGRAMBOT['TELEGRAM_BOT_ADMIN']
     return bot.send_message(chat_id=user_id, text=message)
@@ -139,9 +180,9 @@ def request_new_info(user_id):
 
     message = "Your data is not confirmed! Please update your information ASAP using /config command!"
 
-    print(message)
-    print(user_id)
-    print(type(user_id))
+    # print(message)
+    # print(user_id)
+    # print(type(user_id))
     # if not user_id:
     #     user_id = settings.DJANGO_TELEGRAMBOT['TELEGRAM_BOT_ADMIN']
     return bot.send_message(chat_id=user_id, text=message)
@@ -226,6 +267,10 @@ def main():
             LastName: [MessageHandler(Filters.text, last_name)],
 
             InnoEmail: [MessageHandler(Filters.text, inno_email)],
+
+            LOCATION: [MessageHandler(Filters.regex('^(International|Russian|CIS)$'), location)],
+
+            COURSE: [MessageHandler(Filters.regex('^(Bachelor 1st|Bachelor 2nd|Bachelor 3rd|Bachelor 4th|Master 1st|Master 2nd|Phd)$'), course)],
 
             CONFIRMATION: [MessageHandler(Filters.regex('^(Yes|No)$'), confirm)]
         },

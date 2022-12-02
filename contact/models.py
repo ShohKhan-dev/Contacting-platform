@@ -37,27 +37,27 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
 
-    Bs_1 = 'bs_1'
-    Bs_2 = 'bs_2'
-    Bs_3 = 'bs_3'
-    Bs_4 = 'bs_4'
-    Ms_1 = 'ms_1'
-    Ms_2 = 'ms_2'
-    Phd = 'phd'
+    Bs_1 = 'Bachelor 1st'
+    Bs_2 = 'Bachelor 2nd'
+    Bs_3 = 'Bachelor 3rd'
+    Bs_4 = 'Bachelor 4th'
+    Ms_1 = 'Master 1st'
+    Ms_2 = 'Master 2nd'
+    Phd = 'Phd'
 
     CHOICES = (
         (Bs_1, 'Bachelor 1st'),
         (Bs_2, 'Bachelor 2nd'),
         (Bs_3, 'Bachelor 3rd'),
         (Bs_4, 'Bachelor 4th'),
-        (Ms_1, 'Masters 1st'),
-        (Ms_2, 'Masters 2nd'),
+        (Ms_1, 'Master 1st'),
+        (Ms_2, 'Master 2nd'),
         (Phd, 'Phd')
     )
 
-    INTERNATIONAL = "international"
-    CIS = "cis"
-    RUSSIAN = "russian"
+    INTERNATIONAL = "International"
+    CIS = "CIS"
+    RUSSIAN = "Russian"
 
     LOCATIONS = (
         (INTERNATIONAL, 'International'),

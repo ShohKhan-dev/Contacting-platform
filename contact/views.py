@@ -6,8 +6,10 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from . import telegrambot
 
+
+@login_required
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'notifications.html')
 
 
 @login_required
@@ -144,7 +146,7 @@ def group_filter(request):
 
         keyword = request.POST.get('keyword')
 
-        if keyword in ['international', 'russian', 'cis']:
+        if keyword in ['International', 'Russian', 'CIS']:
             users = User.objects.filter(location=keyword).exclude(is_superuser=True)
         else:
             users = User.objects.filter(course=keyword).exclude(is_superuser=True)
