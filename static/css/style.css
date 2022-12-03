@@ -7,12 +7,25 @@ body {
     height: 100%;
   }
   
+  
   main {
     height: 100vh;
     height: 100%;
     max-height: 100vh;
     overflow-x: auto;
     overflow-y: hidden;
+  }
+
+  .title {
+    margin-top: 2px;
+  }
+
+  .filter-section{
+    margin: 10px;
+  }
+
+  .notification-section{
+    margin: 20px;
   }
   
   .dropdown-toggle { outline: 0; }
@@ -121,8 +134,12 @@ body {
     border-radius: 25px;
     background-color: #f1f1f1;
     color: #000;
+    border: none;
   }
 
+  .chip:hover {
+    background-color: #ccc8c8;
+  }
 
   .chip-clicked {
     display: inline-block;
@@ -136,22 +153,25 @@ body {
     color: rgb(250, 249, 249);
   }
 
-  
-  .closebtn {
-    border: none;
-    padding-left: 10px;
-    color: #888;
-    font-weight: bold;
-    float: right;
-    font-size: 20px;
-    cursor: pointer;
-  }
-  
-  .closebtn:hover {
-    color: #000;
+  .search-result{
+    background:none; 
+    border:none;
+    border-radius: 5px;
+    margin: 10px 5px;
   }
 
+  .search-result:hover{
+    background-color: #dcd8d8;
+  }
 
-  .user-name:hover{
+  .main-search-user:hover{
+    background-color: #dcd8d8;
+  }
+
+  
+ 
+
+
+  /* .user-name:hover{
     background-color: aqua;
-  }
+  } */

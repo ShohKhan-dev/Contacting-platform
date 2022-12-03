@@ -68,7 +68,7 @@
 
       {% endif %}
 
-      <div id="results-box">
+      <div id="results-box" style="overflow-y: auto; height: 650px;">
 
       </div>
        
@@ -105,7 +105,7 @@
       <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
       <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
     </ul>
-    <p class="text-center text-muted">&copy; 2022 Company, Inc</p>
+    <p class="text-center text-muted">&copy; 2022 BOTME Platform</p>
 </footer>
 
 
@@ -144,7 +144,7 @@
                         if (user.id != cur_user_id){
 
                           resultsBox.innerHTML +=  `<li>
-                                                      <a href="${url}" class="nav-link link-dark">
+                                                      <a href="${url}" class="main-search-user nav-link link-dark">
                                                         <i class="fa-solid fa-user"></i>
                                                         ${user.first_name} ${user.last_name}
                                                       </a>

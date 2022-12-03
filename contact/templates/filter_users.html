@@ -6,59 +6,59 @@
 
 {% block content %}
 
-    <div class="container" id="filter_users">
+    <div class="container filter-section" id="filter_users">
 
-        <h1 class="title">Filter Users</h1>
+        <h2 class="title">Filter Users</h2>
         <div id="info-message">
 
         </div>
         <hr>
 
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-5">
 
-                <div class="row" style="height: 200px;">
+                <div class="row" style="height: 200px; overflow-y: auto">
                     <div class="col-md-12">
-                        <div class="chip" id="word-International" onClick="highlight('International')"> 
+                        <button class="chip" id="word-International" onClick="highlight('International')"> 
                             International
-                            <span class="closebtn">&times;</span>
-                        </div>
-                        <div class="chip" id="word-Russian" onClick="highlight('Russian')"> 
+                            
+                        </button>
+                        <button class="chip" id="word-Russian" onClick="highlight('Russian')"> 
                             Russian
-                            <span class="closebtn">&times;</span>
-                        </div>
-                        <div class="chip" id="word-CIS" onClick="highlight('CIS')"> 
+                            
+                        </button>
+                        <button class="chip" id="word-CIS" onClick="highlight('CIS')"> 
                             CIS
-                            <span class="closebtn">&times;</span>
-                        </div>
-                        <div class="chip" id="word-Bachelor 1st" onClick="highlight('Bachelor 1st')"> 
+                            
+                        </button>
+                        <button class="chip" id="word-Bachelor 1st" onClick="highlight('Bachelor 1st')"> 
                             Bachelor 1st
-                            <span class="closebtn">&times;</span>
-                        </div>
-                        <div class="chip" id="word-Bachelor 2nd" onClick="highlight('Bachelor 2nd')"> 
+                            
+                        </button>
+                        <button class="chip" id="word-Bachelor 2nd" onClick="highlight('Bachelor 2nd')"> 
                             Bachelor 2nd
-                            <span class="closebtn">&times;</span>
-                        </div>
-                        <div class="chip" id="word-Bachelor 3rd" onClick="highlight('Bachelor 3rd')"> 
+                            
+                        </button>
+                        <button class="chip" id="word-Bachelor 3rd" onClick="highlight('Bachelor 3rd')"> 
                             Bachelor 3rd
-                            <span class="closebtn">&times;</span>
-                        </div>
-                        <div class="chip" id="word-Bachelor 4th" onClick="highlight('Bachelor 4th')"> 
+                            
+                        </button>
+                        <button class="chip" id="word-Bachelor 4th" onClick="highlight('Bachelor 4th')"> 
                             Bachelor 4th
-                            <span class="closebtn">&times;</span>
-                        </div>
-                        <div class="chip" id="word-Master 1st" onClick="highlight('Master 1st')"> 
+                            
+                        </button>
+                        <button class="chip" id="word-Master 1st" onClick="highlight('Master 1st')"> 
                             Master 1st
-                            <span class="closebtn">&times;</span>
-                        </div>
-                        <div class="chip" id="word-Master 2nd" onClick="highlight('Master 2nd')"> 
+                            
+                        </button>
+                        <button class="chip" id="word-Master 2nd" onClick="highlight('Master 2nd')"> 
                             Master 2nd
-                            <span class="closebtn">&times;</span>
-                        </div>
-                        <div class="chip" id="word-Phd" onClick="highlight('Phd')"> 
+                            
+                        </button>
+                        <button class="chip" id="word-Phd" onClick="highlight('Phd')"> 
                             Phd
-                            <span class="closebtn">&times;</span>
-                        </div>
+                            
+                        </button>
 
                     </div>
                 
@@ -75,9 +75,8 @@
                         </form>
                     </div>
 
-                    <div id="filters-box">
-                        
-                        
+                    <div class="my-2" id="filters-box" style="overflow-y: auto; height: 300px;">
+                          
                     </div>
                 </div>
                 
@@ -85,15 +84,14 @@
             </div>
             
 
-            <div class="col-md-6">
-                <div class="row" style="overflow-y: scroll; height: 450px;">
+            <div class="col-md-7" style="border-left: 1px solid #ccc;">
+                <div class="row" style="overflow-y: auto; height: 430px;">
                     <div class="col-md-12" id="show-filtered">
-
-
+            
                     </div>
 
                 </div>
-                <div class="row">
+                <div class="row my-2">
                     <div class="col-md-12">
                         <form autocomplete="off" onsubmit="return false;">
                             {% csrf_token %}
@@ -177,10 +175,10 @@
 
                             filtered_users.push(user.id);
 
-                            showFiltered.innerHTML += `<div class="user-name chip" id="user-${user.id}" onClick="filterManager(${user.id},'${user.first_name}','${user.last_name}')"> 
+                            showFiltered.innerHTML += `<button class="user-name chip" id="user-${user.id}" onClick="filterManager(${user.id},'${user.first_name}','${user.last_name}')"> 
                                                             ${user.first_name} ${user.last_name}
-                                                            <span class="closebtn">&times;</span>
-                                                        </div>`
+                                                            
+                                                        </button>`
                         }
 
                       })
@@ -213,10 +211,11 @@
 
                         if (!filtered_users.includes(user.id)){
 
-                            filtersBox.innerHTML +=`<div class="user-name my-2" id="student-${user.id}" onClick="filterManager(${user.id},'${user.first_name}','${user.last_name}')">
-                                                        <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
-                                                        ${user.first_name} ${user.last_name}
-                                                    </div>`
+                            filtersBox.innerHTML +=`<button class="search-result nav-link link-dark my-2" id="student-${user.id}" onClick="filterManager(${user.id},'${user.first_name}','${user.last_name}')">
+                                                            <i class="fa-solid fa-user"></i>
+                                                            ${user.first_name} ${user.last_name}
+                                                    </button>
+                                                    `
 
                         }
 
@@ -257,10 +256,10 @@
 
             filtered_users.push(id);
 
-            showFiltered.innerHTML += `<div class="user-name chip" id="user-${id}" onClick="filterManager(${id},'${first_name}','${last_name}')"> 
+            showFiltered.innerHTML += `<button class="user-name chip" id="user-${id}" onClick="filterManager(${id},'${first_name}','${last_name}')"> 
                                             ${first_name} ${last_name}
-                                            <span class="closebtn">&times;</span>
-                                        </div>`
+                                            
+                                        </button>`
         }
     }
 
@@ -283,7 +282,9 @@
             
                 const data = res.data
 
-                infomsg.innerHTML = `<p style="color:red">Message to all selected Students has been sent!</p>`
+                infomsg.innerHTML = `<div class="alert alert-success" role="alert">
+                                        Message was successfully sent to all selected users!
+                                    </div>`
                 
             },
             error: (err)=> {

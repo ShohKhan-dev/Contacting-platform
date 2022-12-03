@@ -118,7 +118,9 @@
         success: (res)=> {
            
             const data = res.data
-            infomsg.innerHTML = `<p style="color:red">Request for updating profile info is sent!</p>`
+            infomsg.innerHTML = `<div class="alert alert-success" role="alert">
+                                        Request to update info is successfully sent!
+                                  </div>`
         },
         error: (err)=> {
             console.log(err)
