@@ -23,9 +23,8 @@
     
 <header>
   <div class="navbar navbar-dark bg-dark shadow-sm">
-    <div class="container">
+    <div class="container header_container">
       <a href="/" class="navbar-brand d-flex align-items-center">
-        
         <strong><i class="fa-solid fa-robot"></i> BOTME</strong>
       </a>
       {% if request.user.is_authenticated %}
@@ -96,7 +95,7 @@
 {% endblock %}
 
 </main>
-
+<!--
 <footer class="py-3 my-4 border-top mt-2">
     <ul class="nav justify-content-center border-bottom pb-3 mb-3">
       <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
@@ -107,6 +106,8 @@
     </ul>
     <p class="text-center text-muted">&copy; 2022 Company, Inc</p>
 </footer>
+-->
+
 
 
     <script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>

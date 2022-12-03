@@ -8,91 +8,91 @@
 
 {% block content %}
 
-<div class="container m-4">
-
+<div class="container m-4 ">
+  <div class="row info-msg">
+    <div class="msg-info" id="info-message"></div>
+  </div>
+  <div class="profile_container">
+    <div class="row user_info_table">
+      <table id="example" class="table">
+        <tbody>
+            <tr> 
+              <td><strong>Telegram Id</strong></td>
+              <td>{{cur_user.username}}</td>
+            </tr>
+            <tr> 
+              <td><strong>Telegram Username</strong></td>          
+              <td><a href="https://t.me/{{cur_user.telegram_username}}" target="_blank" class="alias">@{{cur_user.telegram_username}}</a></td>
+            </tr>
+            <!--
+            <tr> 
+              <td><strong>Innopolis Email</strong></td>
+              <td>{{cur_user.inno_email}}</td>
+            </tr>
+            
+            <tr> 
+              <td><strong>First Name</strong></td>
+              <td>{{cur_user.first_name}}</td>
+            </tr>
+            <tr> 
+              <td><strong>Last Name</strong></td>
+              <td>{{cur_user.last_name}}</td>
+            </tr>
+            -->
+            <tr> 
+              <td><strong>Telegram First Name</strong></td>
+              <td>{{cur_user.telegram_first_name}}</td>
+            </tr>
+            <tr> 
+              <td><strong>Telegram Last Name</strong></td>
+              <td>{{cur_user.telegram_last_name}}</td>
+            </tr>
+            <tr> 
+              <td><strong>Location</strong></td>
+              <td>{{cur_user.location}}</td>
+            </tr>
+            <tr> 
+              <td><strong>Course</strong></td>
+              <td>{{cur_user.course}}</td>
+            </tr>
+            <tr> 
+              <td><strong>Group</strong></td>
+              <td>{{cur_user.group}}</td>
+            </tr>
+            <tr> 
+              <td><strong>Joined Date</strong></td>
+              <td>{{cur_user.date_joined|naturaltime}}</td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
   
-  <div class="row">
-    <div class="col-md-4" id="info-message">
+    <div class="main_info">
+      <div class="card-avatar">
+            <img class="img" src="../../static/img/empty.png" alt="avatar">
+      </div>
+
+      <div class="inno_email">{{cur_user.inno_email}}</div>
+      <div class="personal_info">{{cur_user.first_name}} {{cur_user.last_name}}</div>
+  
+      <div class="row buttons_row">
       
-    </div>
-
-  </div>
-
-  <div class="row">
-    <table id="example" class="table user_info_table" style="width:80%">
-
-      <tbody>
-          <tr> 
-            <td><strong>Telegram Id</strong></td>
-            <td>{{cur_user.username}}</td>
-          </tr>
-          <tr> 
-            <td><strong>Telegram Username</strong></td>          
-            <td><a href="https://t.me/{{cur_user.telegram_username}}" target="_blank" class="alias">@{{cur_user.telegram_username}}</a></td>
-          </tr>
-          <tr> 
-            <td><strong>Personal Email</strong></td>
-            <td>{{cur_user.email}}</td>
-          </tr>
-          <tr> 
-            <td><strong>Innopolis Email</strong></td>
-            <td>{{cur_user.inno_email}}</td>
-          </tr>
-          <tr> 
-            <td><strong>First Name</strong></td>
-            <td>{{cur_user.first_name}}</td>
-          </tr>
-          <tr> 
-            <td><strong>Last Name</strong></td>
-            <td>{{cur_user.last_name}}</td>
-          </tr>
-          <tr> 
-            <td><strong>Telegram First Name</strong></td>
-            <td>{{cur_user.telegram_first_name}}</td>
-          </tr>
-          <tr> 
-            <td><strong>Telegram Last Name</strong></td>
-            <td>{{cur_user.telegram_last_name}}</td>
-          </tr>
-          <tr> 
-            <td><strong>Location</strong></td>
-            <td>{{cur_user.location}}</td>
-          </tr>
-          <tr> 
-            <td><strong>Course</strong></td>
-            <td>{{cur_user.course}}</td>
-          </tr>
-          <tr> 
-            <td><strong>Group</strong></td>
-            <td>{{cur_user.group}}</td>
-          </tr>
-          <tr> 
-            <td><strong>Is Active</strong></td>
-            <td>{{cur_user.is_active}}</td>
-          </tr>
-          <tr> 
-            <td><strong>Joined Date</strong></td>
-            <td>{{cur_user.date_joined|naturaltime}}</td>
-          </tr>
-          
-      </tbody>
-    </table>
-
-  </div>
-
-  <div class="row buttons_row">
+        <div class="msg_btn">
+          <a href="{% url 'conversation' cur_user.id %}" >Message</a>
+        </div>
     
-    <div class="col-md-4 mx-2 msg_btn">
-      <a href="{% url 'conversation' cur_user.id %}" >Message</a>
-    </div>
-
-    <div class="col-md-4 mx-2 ">
-      {% csrf_token %}
-
-      <button class="request_info_btn" onclick="requestButton()">Ask to Update Info!</button>
-
+        <div class=" request_info">
+          {% csrf_token %}
+    
+          <button class="request_info_btn" onclick="requestButton()">Ask to Update Info!</button>
+    
+        </div>
+      </div>
     </div>
   </div>
+  
+
+
 
   
 </div>
