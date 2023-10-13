@@ -14,18 +14,18 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+from decouple import config
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-lhq9n#8b!-azq55b!%l!8v)_l#rss6nosb$n%#_wq3pgla6yd#'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-MY_HOST = "mysamplebot.loca.lt"
+MY_HOST = config('MY_HOST')
 
 ALLOWED_HOSTS = [MY_HOST, '127.0.0.1']
 
@@ -148,11 +148,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #Django Telegram Bot settings
 
-TELEGRAM_BOT_ADMIN=75157851
-TELEGRAM_BOT_NAME="this_is_ban_bot"
-TELEGRAM_BOT_TOKEN="1645467615:AAFSEBQE7hGM17M3nYNgoZZtc-Hbd8sWnhU"
-TELEGRAM_BOT_MODE="POLLING"
-TELEGRAM_BOT_DISABLE_SETUP=False
+TELEGRAM_BOT_ADMIN = config('TELEGRAM_BOT_ADMIN', cast=int)
+TELEGRAM_BOT_NAME = config('TELEGRAM_BOT_NAME')
+TELEGRAM_BOT_TOKEN = config('TELEGRAM_BOT_TOKEN')
+TELEGRAM_BOT_MODE = config('TELEGRAM_BOT_MODE')
+TELEGRAM_BOT_DISABLE_SETUP = config('TELEGRAM_BOT_DISABLE_SETUP', default=False, cast=bool)
 
 DJANGO_TELEGRAMBOT = {
 
