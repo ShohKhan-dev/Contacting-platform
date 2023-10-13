@@ -215,7 +215,7 @@ def command_help(update, context):
 
 
 def get_user_response(update, context):
-    text = update.message.text
+    
 
     user = User.objects.get(username = update.message.from_user.id)
 
@@ -223,26 +223,28 @@ def get_user_response(update, context):
         update.message.reply_text('Sorry! You need to update your information first with /config command!')
     
     else:
-        admin = User.objects.filter(is_superuser=True)[0]
+        if update.message.text:
+            text = update.message.text
+            admin = User.objects.filter(is_superuser=True)[0]
 
-        conversations = Conversation.objects.filter(users__in=[admin.id])
-        conversations = conversations.filter(users__in=[user.id])
+            conversations = Conversation.objects.filter(users__in=[admin.id])
+            conversations = conversations.filter(users__in=[user.id])
 
-        if conversations.count() == 1:
-            conversation = conversations[0]
+            if conversations.count() == 1:
+                conversation = conversations[0]
+            else:
+                recipient = User.objects.get(id=user.id)
+                conversation = Conversation.objects.create()
+                conversation.users.add(admin)
+                conversation.users.add(recipient)
+                conversation.save()
+
+            ConversationMessage.objects.create(conversation=conversation, content=text, created_by=user)
+
+            Notification.objects.create(to_user=admin, notification_type='message', created_by=user)
+            update.message.reply_text('Hello! \nThank you for your message! The employee will proceed it soon.')
         else:
-            recipient = User.objects.get(id=user.id)
-            conversation = Conversation.objects.create()
-            conversation.users.add(admin)
-            conversation.users.add(recipient)
-            conversation.save()
-
-        ConversationMessage.objects.create(conversation=conversation, content=text, created_by=user)
-
-        Notification.objects.create(to_user=admin, notification_type='message', created_by=user)
-
-        
-        update.message.reply_text('Hello! \nThank you for your message! The employee will proceed it soon.')
+            update.message.reply_text('Sorry, you need to enter text!')
 
 def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))

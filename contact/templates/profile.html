@@ -118,7 +118,11 @@
         success: (res)=> {
            
             const data = res.data
-            infomsg.innerHTML = `<p style="color:red">Request for updating profile info is sent!</p>`
+            infomsg.innerHTML = `<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                  <strong>Request to update profile info is successfully sent!</strong>
+                                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>`
+
         },
         error: (err)=> {
             console.log(err)
